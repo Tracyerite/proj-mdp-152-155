@@ -2,33 +2,32 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "calculator-app"
-        CONTAINER_NAME = "calculator"
+        DOCKER_HUB_CREDENTIALS = 'Docker-hub'
+        IMAGE_NAME = 'tracyedisemi/web-calculator'
     }
 
     stages {
-        stage('Clone Repo') {
+        stage('Checkout') {
             steps {
-                git branch: 'project-1', url: 'https://github.com/Tracyerite/proj-mdp-152-155.git'
-            }
-        }
-
-        stage('Build WAR') {
-            steps {
-                sh 'mvn clean package -DskipTests'
+                git branch: 'project-1', url: 'https://github.com/Tracyerite/project1.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                script {
+                    docker.build("${IMAGE_NAME}:latest")
+                }
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Push to Docker Hub') {
             steps {
-                sh 'docker rm -f $CONTAINER_NAME || true'
-                sh 'docker run -d -p 8081:8080 --name $CONTAINER_NAME $IMAGE_NAME'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
+                        docker.image("${IMAGE_NAME}:latest").push()
+                    }
+                }
             }
         }
     }
