@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        GIT_CREDENTIALS = 'github-creds' // Add this in Jenkins > Credentials
         DOCKER_HUB_CREDENTIALS = 'Docker-hub'
         IMAGE_NAME = 'tracyedisemi/web-calculator'
     }
@@ -9,7 +10,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'project-1', url: 'https://github.com/Tracyerite/project1.git'
+                git branch: 'project-1',
+                    credentialsId: "${GIT_CREDENTIALS}",
+                    url: 'https://github.com/Tracyerite/proj-mdp-152-155.git'
             }
         }
 
