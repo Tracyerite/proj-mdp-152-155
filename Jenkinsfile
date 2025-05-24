@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        GIT_CREDENTIALS = 'github-creds' // Add this in Jenkins > Credentials
-        DOCKER_HUB_CREDENTIALS = 'newtoken'
+        GIT_CREDENTIALS = 'github-creds'
+        DOCKER_HUB_CREDENTIALS = 'Docker-hub'
         IMAGE_NAME = 'tracyedisemi/web-calculator'
     }
 
