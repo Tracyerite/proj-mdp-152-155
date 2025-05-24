@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -7,11 +6,12 @@ pipeline {
         CONTAINER_NAME = "calculator"
     }
 
-   stage('Clone Repo') {
-    steps {
-        git branch: 'project-1', url: 'https://github.com/Tracyerite/proj-mdp-152-155.git'
-     }
-  }
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git branch: 'project-1', url: 'https://github.com/Tracyerite/proj-mdp-152-155.git'
+            }
+        }
 
         stage('Build WAR') {
             steps {
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'  
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
