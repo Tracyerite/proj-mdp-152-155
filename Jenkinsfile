@@ -7,12 +7,11 @@ pipeline {
         CONTAINER_NAME = "calculator"
     }
 
-    stages {
-        stage('Clone Repo') {
-            steps {
-                git 'https://github.com/Tracyerite/proj-mdp-152-155.git'
-            }
-        }
+   stage('Clone Repo') {
+    steps {
+        git branch: 'project-1', url: 'https://github.com/Tracyerite/proj-mdp-152-155.git'
+     }
+  }
 
         stage('Build WAR') {
             steps {
