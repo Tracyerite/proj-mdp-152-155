@@ -1,0 +1,17 @@
+---
+- name: Delete Kubernetes cluster using Kops
+  hosts: localhost
+  connection: local
+  # become: yes  # Removed because it's not needed for kops command
+
+  vars:
+    bucket_name: kops-tracy
+    cluster_name: my-k8s-cluster.k8s.local
+
+  tasks:
+    - name: Delete the Kubernetes cluster
+      shell: |
+        export KOPS_STATE_STORE=s3://{{ bucket_name }}
+        kops delete cluster --name {{ cluster_name }} --yes
+      args:
+        executable: /bin/bash

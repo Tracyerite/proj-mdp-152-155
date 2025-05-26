@@ -1,0 +1,47 @@
+---
+- name: Create Kubernetes Cluster with Kops
+  hosts: master
+  become: yes
+
+  vars:
+    cluster_name: my-k8s-cluster.k8s.local
+    bucket_name: kops-tracy
+    state_store: s3://kops-tracy
+    region: us-east-1
+    zones: us-east-1a,us-east-1b
+    node_size: t3.medium
+    node_count: 2
+    dns_zone: k8s.local
+
+  tasks:
+    - name: Ensure environment variable for KOPS_STATE_STORE is set
+      lineinfile:
+        path: ~/.bashrc
+        line: 'export KOPS_STATE_STORE={{ state_store }}'
+        create: yes
+
+    - name: Source ~/.bashrc to load KOPS_STATE_STORE
+      shell: source ~/.bashrc
+      args:
+        executable: /bin/bash
+
+    - name: Check if the Kubernetes cluster exists
+      shell: /usr/local/bin/kops get clusters --state=s3://{{ bucket_name }}
+      register: cluster_check
+      ignore_errors: true
+
+    - name: Delete existing Kubernetes cluster if it exists
+      shell: /usr/local/bin/kops delete cluster --name={{ cluster_name }} --state=s3://{{ bucket_name }} --yes
+      when: cluster_check is defined and cluster_check.rc is defined and cluster_check.rc == 0
+
+    - name: Create Kubernetes cluster
+      shell: |
+        /usr/local/bin/kops create cluster \
+          --name={{ cluster_name }} \
+          --zones={{ zones }} \
+          --node-count={{ node_count }} \
+          --node-size={{ node_size }} \
+          --control-plane-size={{ node_size }} \
+          --dns-zone={{ dns_zone }} \
+          --state=s3://{{ bucket_name }} \
+          --yes
