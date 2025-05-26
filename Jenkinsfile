@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('Docker-hub')
-        IMAGE_NAME = "tracyerite/web-calculator"
+        IMAGE_NAME = "tracyedisemi/web-calculator"
     }
     stages {
         stage('Checkout') {
