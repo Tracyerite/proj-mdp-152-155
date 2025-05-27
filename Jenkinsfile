@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'project-3', url: 'https://github.com/preyelg/project1.git'
+                git branch: 'project-3', url: 'https://github.com/Tracyerite/proj-152-155.git'
             }
         }
         stage('Build Docker Image') {
