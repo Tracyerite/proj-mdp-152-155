@@ -12,7 +12,8 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:latest project-3/'
+                // Build from the root of the repo, where pom.xml exists
+                sh 'docker build -f project-3/Dockerfile -t $IMAGE_NAME:latest .'
             }
         }
         stage('Push to DockerHub') {
@@ -25,6 +26,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh 'kubectl apply -f project-3/k8s/deployment.yaml'
+                    sh 'kubectl apply -f project-3/k8s/service.yaml'
                 }
             }
         }
