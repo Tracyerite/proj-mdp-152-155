@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:latest .'
+                sh 'docker build -t $IMAGE_NAME:latest project-3/'
             }
         }
         stage('Push to DockerHub') {
@@ -24,7 +24,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh 'kubectl apply -f k8s/deployment.yaml'
+                    sh 'kubectl apply -f project-3/k8s/deployment.yaml'
                 }
             }
         }
