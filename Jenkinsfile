@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'github-pat', branch: 'project-3', url: 'https://github.com/Tracyerite/proj-mdp-152-155.git'
+                git branch: 'project-3', url: 'https://github.com/Tracyerite/proj-mdp-152-155.git'
             }
         }
         stage('Build Docker Image') {
